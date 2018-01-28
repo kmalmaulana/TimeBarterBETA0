@@ -3,6 +3,7 @@ package com.example.timebarterbeta0.ui.main.post
 import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.ui.main.akun.AccountPresenter
 import com.example.timebarterbeta0.ui.base.BaseMvpPresenter
+import com.example.timebarterbeta0.utils.OrderState
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,10 +16,19 @@ class PostMvpPresenter : BaseMvpPresenter<PostContract.PostView>(), PostContract
         const val POST_KEY = "Post"
         lateinit var postDb: DatabaseReference
     }
-//    val uId = firebaseAuth.currentUser?.uid.toString()
+    lateinit var posting: Posting
 
-    override fun setPostingFirebase(posting: Posting) {
-
+    override fun setPostingFirebase( judul: String, deskripsi: String, jumlahWaktu: Int, posted: OrderState, currentTimeMillis: Long, category: String) {
+        posting = Posting(
+            firebaseAuth.currentUser?.uid,
+            judul,
+            deskripsi,
+            jumlahWaktu,
+            posted,
+            currentTimeMillis,
+            category,
+            ""
+            )
         postDb = AccountPresenter.userDb
 
         val postId: String = postDb.push().key.toString()
@@ -26,7 +36,7 @@ class PostMvpPresenter : BaseMvpPresenter<PostContract.PostView>(), PostContract
             withContext(Dispatchers.IO){
                 postDb.child(POST_KEY).child(postId).setValue(posting).addOnSuccessListener {
                     uiScope.launch {
-                        mView?.showSuccesMessage()
+                        mView?.showSuccessMessage()
                     }
                 }
             }

@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class Posting(): Parcelable{
 
-    var idUser: String? = ""
+    var uId: String? = ""
     var judul: String? = ""
     var deskripsi: String? = ""
     var jumlahWaktu: Int? = 0
@@ -21,7 +21,7 @@ class Posting(): Parcelable{
     var receivedBy: String = ""
 
     constructor(
-        idUser: String?,
+        uId: String?,
         judul: String?,
         deskripsi: String?,
         jumlahWaktu: Int?,
@@ -30,7 +30,7 @@ class Posting(): Parcelable{
         category: String?,
         receivedBy: String
     ):this() {
-        this.idUser = idUser
+        this.uId = uId
         this.judul = judul
         this.deskripsi = deskripsi
         this.jumlahWaktu = jumlahWaktu
@@ -41,7 +41,7 @@ class Posting(): Parcelable{
     }
 
     init {
-        idUser = ""
+        uId = ""
         judul = ""
         deskripsi = ""
         jumlahWaktu = 0

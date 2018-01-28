@@ -47,7 +47,7 @@ class BerandaAdapter(
 
             with(view){
                 textView_user_post.text = userName
-                posting.idUser?.let { imageView2.loadImage(it) }
+                posting.uId?.let { imageView2.loadImage(it) }
                 textView_date_create_post.text = date
                 textView_judul_post.text = posting.judul
                 textView_deskripsi_post.text = posting.deskripsi

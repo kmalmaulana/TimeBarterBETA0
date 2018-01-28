@@ -34,8 +34,6 @@ open class BaseMvpPresenter<V : BaseView> constructor(
 
     override fun onDetach() {
         mView = null
-        when {
-            !job.isCancelled-> job.cancel()
-        }
+        if (!job.isCancelled) job.cancel()
     }
 }

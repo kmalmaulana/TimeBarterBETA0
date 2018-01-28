@@ -1,17 +1,15 @@
 package com.example.timebarterbeta0.ui.main.post
 
 import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.utils.Kategori
 import com.example.timebarterbeta0.utils.OrderState
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_post.*
 
 class PostActivity : AppCompatActivity(), PostContract.PostView{
@@ -19,8 +17,8 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
     private lateinit var presenter: PostMvpPresenter
     var category = Kategori.UMUM.toString()
 
-    override fun showSuccesMessage() {
-        Toast.makeText(this, "Hore", Toast.LENGTH_SHORT).show()
+    override fun showSuccessMessage() {
+        Toast.makeText(this, "Post uploaded", Toast.LENGTH_SHORT).show()
         finish()
     }
     override fun showLoading() {
@@ -84,25 +82,21 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
         }
     }
 
-    private fun posting(judul: String, deskripsi: String, jumlahWaktu: Int) {
-        val firebaseAuth = FirebaseAuth.getInstance()
+    private fun posting(judul: String, description: String, jumlahWaktu: Int) {
 
-        if(judul.isEmpty()&&deskripsi.isEmpty()){
+        if(judul.isEmpty()&&description.isEmpty()){
             et_judul.error = "Please enter the title"
             et_deskripsi.error = "Please enter description"
         }
 
-        val post = Posting(
-            firebaseAuth.currentUser?.displayName,
+        presenter.setPostingFirebase(
             judul,
-            deskripsi,
+            description,
             jumlahWaktu,
             OrderState.POSTED,
             System.currentTimeMillis(),
-            category,
-            ""
+            category
         )
-        presenter.setPostingFirebase(post)
 
     }
 

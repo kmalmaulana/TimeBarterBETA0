@@ -21,7 +21,7 @@ class DetailPostActivity : BaseActivity(){
     }
 
     private fun bindView(posting: Posting?, date: String) {
-        tv_nama_detail.text = posting?.idUser
+        tv_nama_detail.text = posting?.uId
         tv_judul_detail.text = posting?.judul
         tv_deskripsi_detail.text = posting?.deskripsi
         tv_dateCreate_detail.text = date
