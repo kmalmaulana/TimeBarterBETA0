@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Time Barter BETA 0</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="version">Version</string>
+    <string name="release_date">Release Date</string>
+    <string name="equals">:</string>
+    <string name="deskripsi">Deskripsi..</string>
+    <string name="dummy">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid amet consectetur delectus
+        doloremque ea explicabo minima mollitia neque nihil nisi non obcaecati officiis, praesentium quam quas quibusdam
+        repellendus suscipit velit?
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid blanditiis dicta distinctio error et, ex
+        expedita hic molestias porro soluta veniam voluptates! A earum explicabo, laudantium quas recusandae tempora
+        voluptates.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores culpa cupiditate doloribus eaque eligendi
+        excepturi facere fuga, hic illum ipsam iure mollitia nulla porro quae tempora totam ut velit voluptatibus?
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam culpa, esse est fugit, impedit incidunt ipsam
+        ipsum laborum numquam possimus praesentium quaerat quo recusandae similique unde vel velit veritatis vitae.
+    </string>
+    <string name="logout_toast">logout</string>
+</resources>

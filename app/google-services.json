@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1092394047919",
+    "firebase_url": "https://time-barter-db.firebaseio.com",
+    "project_id": "time-barter-db",
+    "storage_bucket": "time-barter-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092394047919:android:0b449ef1c9005c6d",
+        "android_client_info": {
+          "package_name": "com.example.timebarterbeta0"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092394047919-irmlbvnmn1nulht64ikbbtubqkthru17.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.timebarterbeta0",
+            "certificate_hash": "098fc232e57fa478628258c5cfef3e0d10e9f08e"
+          }
+        },
+        {
+          "client_id": "1092394047919-21gk9n3bhipstsvgj5j4is6t2lgterum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAK0ZgWFodk5pMyplDg62kcF3CryZUzT4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092394047919-21gk9n3bhipstsvgj5j4is6t2lgterum.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
