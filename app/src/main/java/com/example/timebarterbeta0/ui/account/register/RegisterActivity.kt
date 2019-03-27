@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.utils.extentions.gone
 import com.example.timebarterbeta0.utils.extentions.visible
 import com.example.timebarterbeta0.ui.account.AccountContract
@@ -23,16 +23,18 @@ class RegisterActivity : AppCompatActivity(), AccountContract.ViewRegister {
         presenter = AccountPresenter(null, this,null)
 
         button_register.setOnClickListener {
-            presenter.createAccount(User(
-                field_nama.text.toString(),
-                field_email.text.toString(),
-                field_password.text.toString(),
-                5,
-                "",
-                0,
-                "0",
-                listOf()
-            ))
+            presenter.createAccount(
+                User(
+                    field_nama.text.toString(),
+                    field_email.text.toString(),
+                    field_password.text.toString(),
+                    5,
+                    "",
+                    0,
+                    "0",
+                    listOf()
+                )
+            )
         }
 
         button_Tologin.setOnClickListener {

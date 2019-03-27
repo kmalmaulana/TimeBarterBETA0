@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.Posting
+import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.utils.extentions.loadImage
 import kotlinx.android.synthetic.main.row_list_post.view.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BerandaAdapter(private val listPosting: MutableList<Posting>,private val listener:(Posting)->Unit): RecyclerView.Adapter<BerandaAdapter.ViewHolder>() {
+class BerandaAdapter(private val listPosting: MutableList<Posting>, private val listener:(Posting)->Unit): RecyclerView.Adapter<BerandaAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

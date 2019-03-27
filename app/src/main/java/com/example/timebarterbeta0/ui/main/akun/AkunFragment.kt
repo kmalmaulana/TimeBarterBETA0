@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.account.login.LoginActivity
 import com.example.timebarterbeta0.utils.extentions.loadImage
 import com.google.firebase.auth.FirebaseAuth

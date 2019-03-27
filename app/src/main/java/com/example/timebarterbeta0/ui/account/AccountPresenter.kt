@@ -1,8 +1,8 @@
 package com.example.timebarterbeta0.ui.account
 
 import android.util.Patterns
-import com.example.timebarterbeta0.domain.AccountLogin
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.AccountLogin
+import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.base.BaseMvpPresenter
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -11,8 +11,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 
@@ -24,21 +24,15 @@ class AccountPresenter(
 
     companion object {
         const val USER_KEY = "User"
-        val NAMA_USER = "idUser"
-        val EMAIL = "Email"
-        val PASSWORD = "Password"
         var userDb = firebaseDatabase.getReference(USER_KEY)
     }
 
     override fun createAccount(account: User) {
-        val anu =Observable.just("")
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-
-        if (validateInputRegister(account)) {
-            mViewRegister?.showLoading()
-            registerFirebase(account)
+        uiScope.launch {
+            if (validateInputRegister(account)) {
+                mViewRegister?.showLoading()
+                registerFirebase(account)
+            }
         }
     }
 
@@ -80,62 +74,76 @@ class AccountPresenter(
     }
 
     override fun loginAccount(account: AccountLogin) {
-        var nama: String?
-        var email: String?
-        if (validateInputlogin(account)) {
-            mViewLogin?.showLoading()
-            firebaseAuth.signInWithEmailAndPassword(account.email, account.password)
-                .addOnCompleteListener { login ->
-                    if (login.isSuccessful) {
-                        login.addOnSuccessListener { authResult ->
-                            //menerima authResult
-                            Timber.e("hore")
-                            nama = authResult?.user?.displayName
-                            email = authResult?.user?.email
-
-                            mViewLogin?.let { viewLogin ->
-                                Timber.e("hore mViewLogin")
-                                viewLogin.loginSuccess()
-                                viewLogin.hideLoading()
+        uiScope.launch {
+            if (validateInputlogin(account)) {
+                mViewLogin?.showLoading()
+                GlobalScope.launch(Dispatchers.IO) {
+                    firebaseAuth.signInWithEmailAndPassword(account.email, account.password)
+                        .addOnCompleteListener { login ->
+                            uiScope.launch {
+                                login(login)
                             }
-
                         }
-                        login.addOnFailureListener {
-                            mViewLogin?.hideLoading()
-                            Timber.e(it)
-                        }
-                    } else {
+                }
+            }
+        }
+    }
 
-                        mViewLogin?.let { viewLogin ->
-                            viewLogin.loginFailed()
-                            viewLogin.hideLoading()
-                        }
+    private fun login(login: Task<AuthResult>) {
+        if (login.isSuccessful) {
+            login.addOnSuccessListener { authResult ->
+                //menerima authResult
 
+                Timber.e("hore")
+                uiScope.launch {
+                    mViewLogin?.let { viewLogin ->
+                        Timber.e("hore mViewLogin")
+                        viewLogin.loginSuccess()
+                        viewLogin.hideLoading()
                     }
                 }
-        }
 
+            }
+            login.addOnFailureListener {
+                mViewLogin?.hideLoading()
+                Timber.e(it)
+            }
+        } else {
+
+            mViewLogin?.let { viewLogin ->
+                viewLogin.loginFailed()
+                viewLogin.hideLoading()
+            }
+
+        }
     }
 
     override fun getUserInfo() {
         val uid = firebaseAuth.currentUser?.uid.toString()
         userDb = userDb.child(uid)
+        uiScope.launch {
+            withContext(Dispatchers.IO) {
+                userDb.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        uiScope.launch {
+                            suspend {
+                                dataSnapshot.getValue(true)
+                                Timber.e(dataSnapshot.toString())
+                                val userDeferred: Deferred<User?> =
+                                    withContext(coroutineContext) { async { dataSnapshot.getValue(User::class.java) } }
+                                userDeferred.let { userInfo ->
+                                    userInfo.await()?.let { mViewAkun?.showUserInfo(it) }
+                                }
+                            }
+                        }
+                    }
 
-        userDb.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.getValue(true)
-                Timber.e(dataSnapshot.toString())
-                val user = dataSnapshot.getValue(User::class.java)
-                Timber.e(user.toString())
-                user?.let { userInfo ->
-                    mViewAkun?.showUserInfo(userInfo)
-                }
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Timber.e(databaseError.toString())
+                    }
+                })
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Timber.e(databaseError.toString())
-            }
-        })
+        }
     }
 
     override fun validateInputRegister(account: User): Boolean {

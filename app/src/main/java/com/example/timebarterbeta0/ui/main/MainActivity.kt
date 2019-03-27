@@ -6,11 +6,9 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import com.example.timebarterbeta0.LeaderBoardFragment
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.account.AccountContract
 import com.example.timebarterbeta0.ui.account.AccountPresenter
-import com.example.timebarterbeta0.ui.account.login.LoginActivity.Companion.EMAIL_USER_KEY
-import com.example.timebarterbeta0.ui.account.login.LoginActivity.Companion.NAMA_USER_KEY
 import com.example.timebarterbeta0.ui.base.BaseActivity
 import com.example.timebarterbeta0.ui.main.akun.AkunFragment
 import com.example.timebarterbeta0.ui.main.beranda.BerandaFragment
@@ -19,7 +17,6 @@ import com.example.timebarterbeta0.ui.main.listOrder.ListFragment
 import com.example.timebarterbeta0.ui.main.post.PostContract
 import com.example.timebarterbeta0.ui.main.post.PostMvpPresenter
 import kotlinx.android.synthetic.main.main_activity.*
-import timber.log.Timber
 
 
 class MainActivity : BaseActivity(), AccountContract.ViewAkun {

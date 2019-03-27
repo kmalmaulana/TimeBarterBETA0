@@ -48,6 +48,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
     implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0'
 
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
@@ -62,7 +64,7 @@ dependencies {
     // Koin for Android
     implementation "org.koin:koin-android:$koin_version"
     // Koin Android Scope feature
-    implementation "org.koin:koin-android-scope:$koin_version"
+//    implementation "org.koin:koin-android-uiScope:$koin_version"
 
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.7'

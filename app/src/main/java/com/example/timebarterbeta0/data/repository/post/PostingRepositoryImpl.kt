@@ -1,9 +1,6 @@
 package com.example.timebarterbeta0.data.repository.post
 
 //import com.example.timebarterbeta0.data.firebaseHelper.FirebaseHelper
-import com.example.timebarterbeta0.data.preferences.PreferenceHelper
-import com.example.timebarterbeta0.domain.Posting
-import io.reactivex.Observable
 
 
 /*

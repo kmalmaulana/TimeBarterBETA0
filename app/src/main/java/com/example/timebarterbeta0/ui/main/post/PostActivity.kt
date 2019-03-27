@@ -5,12 +5,11 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.utils.Kategori
 import com.example.timebarterbeta0.utils.OrderState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_post.*
-import kotlinx.android.synthetic.main.login_activity.*
 
 class PostActivity : AppCompatActivity(), PostContract.PostView{
 
@@ -66,7 +65,16 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
             et_judul.error = "Please enter judul bro"
             et_deskripsi.error = "Please enter deskripsi dulu setan"
         }
-        val post = Posting(firebaseAuth.currentUser?.displayName,judul,deskripsi, jumlahWaktu,OrderState.POSTED,System.currentTimeMillis(),Kategori.UMUM.toString(),"")
+        val post = Posting(
+            firebaseAuth.currentUser?.displayName,
+            judul,
+            deskripsi,
+            jumlahWaktu,
+            OrderState.POSTED,
+            System.currentTimeMillis(),
+            Kategori.UMUM.toString(),
+            ""
+        )
         presenter.setPostingFirebase(post)
 
     }

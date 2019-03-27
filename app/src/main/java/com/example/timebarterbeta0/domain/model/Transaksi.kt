@@ -1,4 +1,4 @@
-package com.example.timebarterbeta0.domain
+package com.example.timebarterbeta0.domain.model
 
 class Transaksi {
     var user: List<User>

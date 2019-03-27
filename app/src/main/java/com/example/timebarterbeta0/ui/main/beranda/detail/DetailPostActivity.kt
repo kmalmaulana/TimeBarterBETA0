@@ -1,12 +1,10 @@
 package com.example.timebarterbeta0.ui.main.beranda.detail
 
 import android.os.Bundle
-import com.bumptech.glide.Glide
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.ui.base.BaseActivity
 import com.example.timebarterbeta0.ui.main.beranda.BerandaFragment
-import com.example.timebarterbeta0.utils.extentions.loadImage
 import kotlinx.android.synthetic.main.activity_detail_post.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat

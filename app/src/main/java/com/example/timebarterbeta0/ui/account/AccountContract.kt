@@ -1,7 +1,7 @@
 package com.example.timebarterbeta0.ui.account
 
-import com.example.timebarterbeta0.domain.AccountLogin
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.AccountLogin
+import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.base.BaseView
 import com.example.timebarterbeta0.ui.base.MvpPresenter
 

@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.ui.base.BaseFragment
 import com.example.timebarterbeta0.ui.main.beranda.detail.DetailPostActivity
 import kotlinx.android.synthetic.main.fragment_beranda.*
@@ -36,7 +36,6 @@ class BerandaFragment : BaseFragment(), BerandaContract.View{
         rv_list_post.layoutManager= LinearLayoutManager(context)
         rv_list_post.adapter = posting?.let {
             BerandaAdapter(it,listener = { posting ->
-                //Todo() bikin layout detail
                 val intent = Intent(activity, DetailPostActivity::class.java)
                 intent.putExtra(POSTING_EXTRA,posting)
                 startActivity(intent)
@@ -62,9 +61,9 @@ class BerandaFragment : BaseFragment(), BerandaContract.View{
         presenter.onAttach(this)
     }
 
-    override fun onDestroy() {
+    override fun onStop()  {
+        super.onStop()
         presenter.onDetach()
-        super.onDestroy()
     }
 
 }

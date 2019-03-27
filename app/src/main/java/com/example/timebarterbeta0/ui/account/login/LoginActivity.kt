@@ -7,7 +7,7 @@ import android.widget.Toast
 import com.example.timebarterbeta0.R
 import com.example.timebarterbeta0.utils.extentions.gone
 import com.example.timebarterbeta0.utils.extentions.visible
-import com.example.timebarterbeta0.domain.AccountLogin
+import com.example.timebarterbeta0.domain.model.AccountLogin
 import com.example.timebarterbeta0.ui.account.AccountContract
 import com.example.timebarterbeta0.ui.account.AccountPresenter
 import com.example.timebarterbeta0.ui.main.MainActivity
@@ -39,7 +39,6 @@ class LoginActivity : AppCompatActivity(), AccountContract.ViewLogin {
     override fun showLoading() {
         progressBar_login.visible()
     }
-
 
     override fun loginSuccess() {
         Toast.makeText(this@LoginActivity, "Selamat Datang!", Toast.LENGTH_LONG).show()

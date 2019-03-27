@@ -1,8 +1,6 @@
-package com.example.timebarterbeta0.domain
+package com.example.timebarterbeta0.domain.model
 
-import android.os.Parcel
 import android.os.Parcelable
-import androidx.versionedparcelable.ParcelField
 import kotlinx.android.parcel.Parcelize
 
 @Suppress("PLUGIN_WARNING")

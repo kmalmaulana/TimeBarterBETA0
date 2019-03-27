@@ -1,6 +1,6 @@
 package com.example.timebarterbeta0.data.repository.post
 
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import io.reactivex.Observable
 
 interface PostingRepository {
