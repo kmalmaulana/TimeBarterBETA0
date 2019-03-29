@@ -9,10 +9,6 @@ open class BaseMvpPresenter<V : BaseView> constructor(
     protected val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) : MvpPresenter<V> {
 
-    companion object {
-        val firebaseDatabase = FirebaseDatabase.getInstance()
-    }
-
     var mView: V? = null
     lateinit var compositeDisposable: CompositeDisposable
 
