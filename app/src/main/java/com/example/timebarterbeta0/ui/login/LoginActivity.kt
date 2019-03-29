@@ -1,27 +1,29 @@
-package com.example.timebarterbeta0.ui.account.login
+package com.example.timebarterbeta0.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.example.timebarterbeta0.R
+import com.example.timebarterbeta0.domain.model.AccountLogin
+import com.example.timebarterbeta0.ui.base.BaseActivity
+import com.example.timebarterbeta0.ui.main.MainActivity
 import com.example.timebarterbeta0.utils.extentions.gone
 import com.example.timebarterbeta0.utils.extentions.visible
-import com.example.timebarterbeta0.domain.model.AccountLogin
-import com.example.timebarterbeta0.ui.account.AccountContract
-import com.example.timebarterbeta0.ui.account.AccountPresenter
-import com.example.timebarterbeta0.ui.main.MainActivity
 import kotlinx.android.synthetic.main.login_activity.*
 import timber.log.Timber
 
-class LoginActivity : AppCompatActivity(), AccountContract.ViewLogin {
-    private lateinit var presenter: AccountPresenter
+class LoginActivity : BaseActivity(), LoginContract.View {
+    private lateinit var presenter: LoginContract.Presenter
+
+    override fun initLayout(): Int {
+        return R.layout.login_activity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_activity)
 
-        presenter = AccountPresenter(this, null,null)
+        presenter = LoginPresenter(this)
+        presenter.onAttach(this)
 
         button_login.setOnClickListener {
             Toast.makeText(this,"anu",Toast.LENGTH_LONG).show()
@@ -44,8 +46,6 @@ class LoginActivity : AppCompatActivity(), AccountContract.ViewLogin {
         Toast.makeText(this@LoginActivity, "Selamat Datang!", Toast.LENGTH_LONG).show()
 
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//        intent.putExtra(NAMA_USER_KEY, idUser)
-//        intent.putExtra(EMAIL_USER_KEY, Email)
         startActivity(intent)
         finish()
     }
@@ -64,10 +64,5 @@ class LoginActivity : AppCompatActivity(), AccountContract.ViewLogin {
 
     override fun invalidPassword() {
         Toast.makeText(this@LoginActivity, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        val NAMA_USER_KEY = "idUser key"
-        val EMAIL_USER_KEY = "Email key"
     }
 }

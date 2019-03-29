@@ -19,4 +19,10 @@
         ipsum laborum numquam possimus praesentium quaerat quo recusandae similique unde vel velit veritatis vitae.
     </string>
     <string name="logout_toast">logout</string>
+    <string-array name="spinnerKategori">
+        <item>Kursus</item>
+        <item>Hobi</item>
+        <item>Rumah Tangga</item>
+        <item>Umum</item>
+    </string-array>
 </resources>

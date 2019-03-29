@@ -1,8 +1,8 @@
 package com.example.timebarterbeta0.ui.main.beranda
 
 import com.example.timebarterbeta0.domain.model.Posting
-import com.example.timebarterbeta0.ui.account.AccountPresenter
 import com.example.timebarterbeta0.ui.base.BaseMvpPresenter
+import com.example.timebarterbeta0.ui.main.akun.AccountPresenter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -16,16 +16,18 @@ import timber.log.Timber
 class BerandaMvpPresenter : BaseMvpPresenter<BerandaContract.View>(), BerandaContract.Presenter {
 
     lateinit var postDb: DatabaseReference
-    lateinit var postingList: MutableList<Posting>
+    var postingList: MutableList<Posting>?=null
 
     val uId = firebaseAuth.currentUser?.uid.toString()
 
     override fun showPosting() {
+        firebaseDatabase.setPersistenceEnabled(true)
         postingList = mutableListOf()
         val userReference = AccountPresenter.userDb.child(uId)
         postDb = userReference.child("Post")
+        postDb.keepSynced(true)
         val userRef = firebaseDatabase.getReference("User")
-
+        userRef.keepSynced(true)
         uiScope.launch {
 
             withContext(Dispatchers.IO) {
@@ -56,7 +58,7 @@ class BerandaMvpPresenter : BaseMvpPresenter<BerandaContract.View>(), BerandaCon
                                             Timber.e(post.toString())
                                             val postingValue = async { post.getValue(Posting::class.java) }
                                             postingValue.let { posting ->
-                                                posting.await()?.let { postingList.add(it) }
+                                                posting.await()?.let { postingList?.add(it) }
                                                 uiScope.launch {
                                                     mView?.getPosting(postingList)
                                                 }
@@ -76,5 +78,10 @@ class BerandaMvpPresenter : BaseMvpPresenter<BerandaContract.View>(), BerandaCon
                 })
             }
         }
+    }
+
+    @Suppress("UNUSED_EXPRESSION")
+    override fun showDetail(callBack: () -> Unit) {
+        callBack
     }
 }

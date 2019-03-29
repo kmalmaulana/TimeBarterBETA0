@@ -12,8 +12,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(initLayout())
         database = FirebaseDatabase.getInstance()
-
-
     }
 
     abstract fun initLayout(): Int

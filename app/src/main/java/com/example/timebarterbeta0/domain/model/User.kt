@@ -13,9 +13,8 @@ class User():Parcelable{
     var photoProfile: String?
     var point: Int?
     var level: String?
-    var listPosting: List<Posting>?
 
-    constructor(nama: String?, email: String?, password: String?, timeBalance: Long?, photoProfile: String?, point: Int?, level: String, listPosting: List<Posting>) : this() {
+    constructor(nama: String?, email: String?, password: String?, timeBalance: Long?, photoProfile: String?, point: Int?, level: String) : this() {
         this.Name = nama
         this.Email = email
         this.Password = password
@@ -23,7 +22,6 @@ class User():Parcelable{
         this.photoProfile = photoProfile
         this.point = point
         this.level = level
-        this.listPosting = listPosting
     }
 
     init {
@@ -34,6 +32,5 @@ class User():Parcelable{
         photoProfile = ""
         point = 0
         level = "0"
-        listPosting = listOf()
     }
 }
