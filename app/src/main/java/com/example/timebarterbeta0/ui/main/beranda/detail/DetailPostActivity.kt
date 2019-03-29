@@ -1,12 +1,10 @@
 package com.example.timebarterbeta0.ui.main.beranda.detail
 
 import android.os.Bundle
-import com.bumptech.glide.Glide
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.ui.base.BaseActivity
 import com.example.timebarterbeta0.ui.main.beranda.BerandaFragment
-import com.example.timebarterbeta0.utils.extentions.loadImage
 import kotlinx.android.synthetic.main.activity_detail_post.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -17,19 +15,25 @@ class DetailPostActivity : BaseActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val posting = intent.getParcelableExtra<Posting>(BerandaFragment.POSTING_EXTRA)
-        tv_nama_detail.text = posting.idUser
-        tv_judul_detail.text = posting.judul
-        tv_deskripsi_detail.text = posting.deskripsi
+        val posting = intent.getParcelableExtra<Posting?>(BerandaFragment.POSTING_EXTRA)
+        val date: String = settingTime(posting)
+        bindView(posting, date)
+    }
 
-        val calendar: Date? = Calendar.getInstance().time
-        calendar?.time = posting.dateCreated!!
-        val dateFormat: DateFormat = object : SimpleDateFormat("yyyy-MM-dd hh:mm:ss"){}
-        val date: String = dateFormat.format(calendar)
-
+    private fun bindView(posting: Posting?, date: String) {
+        tv_nama_detail.text = posting?.idUser
+        tv_judul_detail.text = posting?.judul
+        tv_deskripsi_detail.text = posting?.deskripsi
         tv_dateCreate_detail.text = date
-        tv_jumlahWaktu_detail.text = posting.jumlahWaktu.toString()
-        tv_kategori_detail.text = posting.category
+        tv_jumlahWaktu_detail.text = posting?.jumlahWaktu.toString()
+        tv_kategori_detail.text = posting?.category
+    }
+
+    private fun settingTime(posting: Posting?): String {
+        val calendar: Date? = Calendar.getInstance().time
+        posting?.let { calendar?.time = it.dateCreated!! }
+        val dateFormat: DateFormat = object : SimpleDateFormat("dd-MM-yyyy hh:mm"){}
+        return dateFormat.format(calendar)
     }
 
     override fun initLayout(): Int = R.layout.activity_detail_post

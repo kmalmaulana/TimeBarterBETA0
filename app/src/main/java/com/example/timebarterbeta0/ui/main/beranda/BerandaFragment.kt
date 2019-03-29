@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.ui.base.BaseFragment
 import com.example.timebarterbeta0.ui.main.beranda.detail.DetailPostActivity
 import kotlinx.android.synthetic.main.fragment_beranda.*
@@ -16,32 +16,50 @@ import kotlinx.android.synthetic.main.fragment_beranda.*
 
 class BerandaFragment : BaseFragment(), BerandaContract.View{
 
-    val presenter : BerandaContract.Presenter
+    lateinit var presenter : BerandaContract.Presenter
 
     companion object {
-        val POSTING_EXTRA = "posting"
-        fun newInstance(): BerandaFragment {
+        const val POSTING_EXTRA = "posting"
+        const val USER_EXTRA = "username"
+        fun newInstance(userName: String?): BerandaFragment {
             val args = Bundle()
+            args.putString(USER_EXTRA,userName)
             val fragment = BerandaFragment()
             fragment.arguments = args
             return fragment
         }
     }
 
+    var userName: String? = ""
+
     init {
-        presenter = BerandaMvpPresenter()
+
     }
 
     override fun getPosting(posting: MutableList<Posting>?) {
         rv_list_post.layoutManager= LinearLayoutManager(context)
-        rv_list_post.adapter = posting?.let {
-            BerandaAdapter(it,listener = { posting ->
-                //Todo() bikin layout detail
-                val intent = Intent(activity, DetailPostActivity::class.java)
-                intent.putExtra(POSTING_EXTRA,posting)
-                startActivity(intent)
-            })
+        rv_list_post.adapter = posting?.let { listPosting ->
+            BerandaAdapter(
+                listPosting = listPosting,
+                listener = cardViewListener(),
+                userName = userName
+            )
         }
+    }
+
+    private fun cardViewListener(): (Posting) -> Unit {
+        return { posting: Posting ->
+            val intent = Intent(activity, DetailPostActivity::class.java)
+            showDetail(intent, posting)
+            presenter.showDetail {
+                showDetail(intent, posting)
+            }
+        }
+    }
+
+    private fun showDetail(intent: Intent, posting: Posting) {
+        intent.putExtra(POSTING_EXTRA, posting)
+        startActivity(intent)
     }
 
     override fun onCreateView(
@@ -54,17 +72,19 @@ class BerandaFragment : BaseFragment(), BerandaContract.View{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        presenter = BerandaMvpPresenter()
+        presenter.onAttach(this)
         presenter.showPosting()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.onAttach(this)
+        userName = arguments?.getString(USER_EXTRA)
     }
 
     override fun onDestroy() {
-        presenter.onDetach()
         super.onDestroy()
+        presenter.onDetach()
     }
 
 }

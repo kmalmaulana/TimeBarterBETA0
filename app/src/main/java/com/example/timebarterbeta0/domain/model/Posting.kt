@@ -1,4 +1,4 @@
-package com.example.timebarterbeta0.domain
+package com.example.timebarterbeta0.domain.model
 
 import android.os.Parcelable
 import com.example.timebarterbeta0.utils.Kategori

@@ -1,43 +1,46 @@
-package com.example.timebarterbeta0.ui.account.register
+package com.example.timebarterbeta0.ui.register
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.User
+import com.example.timebarterbeta0.domain.model.User
+import com.example.timebarterbeta0.ui.login.LoginActivity
 import com.example.timebarterbeta0.utils.extentions.gone
 import com.example.timebarterbeta0.utils.extentions.visible
-import com.example.timebarterbeta0.ui.account.AccountContract
-import com.example.timebarterbeta0.ui.account.AccountPresenter
-import com.example.timebarterbeta0.ui.account.login.LoginActivity
 import kotlinx.android.synthetic.main.register_activity.*
 
-class RegisterActivity : AppCompatActivity(), AccountContract.ViewRegister {
-    private lateinit var presenter: AccountContract.AccountPresenter
+class RegisterActivity : AppCompatActivity(), RegisterContract.View {
+    private lateinit var presenter: RegisterContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.register_activity)
-
-        presenter = AccountPresenter(null, this,null)
+        presenter = RegisterPresenter(this)
+        presenter.onAttach(this)
 
         button_register.setOnClickListener {
-            presenter.createAccount(User(
+            createAccount()
+        }
+
+        button_Tologin.setOnClickListener {
+            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+        }
+    }
+
+    private fun createAccount() {
+        presenter.createAccount(
+            User(
                 field_nama.text.toString(),
                 field_email.text.toString(),
                 field_password.text.toString(),
                 5,
                 "",
                 0,
-                "0",
-                listOf()
-            ))
-        }
-
-        button_Tologin.setOnClickListener {
-            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-        }
+                "0"
+            )
+        )
     }
 
     override fun showLoading() {
@@ -70,6 +73,10 @@ class RegisterActivity : AppCompatActivity(), AccountContract.ViewRegister {
         Toast.makeText(this@RegisterActivity, "Password is to weak!", Toast.LENGTH_SHORT).show()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDetach()
+    }
 }
 
 

@@ -3,18 +3,21 @@ package com.example.timebarterbeta0.ui.main.post
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.timebarterbeta0.R
-import com.example.timebarterbeta0.domain.Posting
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.utils.Kategori
 import com.example.timebarterbeta0.utils.OrderState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_post.*
-import kotlinx.android.synthetic.main.login_activity.*
 
 class PostActivity : AppCompatActivity(), PostContract.PostView{
 
-    lateinit var presenter: PostMvpPresenter
+    private lateinit var presenter: PostMvpPresenter
+    var category = Kategori.UMUM.toString()
 
     override fun showSuccesMessage() {
         Toast.makeText(this, "Hore", Toast.LENGTH_SHORT).show()
@@ -27,35 +30,57 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
     override fun hideLoading() {
 
     }
+
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_post)
 
-        btn_posting.setOnClickListener {
-
-            val judul = et_judul.text.toString()
-            val deskripsi  = et_deskripsi.text.toString()
-            val jumlahWaktu : Int = Integer.parseInt(et_jumlahWaktu.text.toString())
-
-            posting(judul, deskripsi, jumlahWaktu)
-
-        }
         presenter = PostMvpPresenter()
+        presenter.onAttach(this)
+
+        initSpinnerView()
+        btn_posting.setOnClickListener { posting() }
         val jumlahWaktu = et_jumlahWaktu.text.toString()
 
-        var jumlahWaktuInteger = Integer.parseInt(jumlahWaktu)
+        val jumlahWaktuInteger = Integer.parseInt(jumlahWaktu)
 
+        countTime(jumlahWaktuInteger)
+    }
+
+    private fun countTime(jumlahWaktuInteger: Int) {
+        var jumlahWaktuInteger1 = jumlahWaktuInteger
         btn_add_time.setOnClickListener {
-            jumlahWaktuInteger += 1
-            et_jumlahWaktu.text = jumlahWaktuInteger.toString()
+            jumlahWaktuInteger1 += 1
+            et_jumlahWaktu.text = jumlahWaktuInteger1.toString()
         }
 
         btn_min_time.setOnClickListener {
-            jumlahWaktuInteger -= 1
-            et_jumlahWaktu.text = jumlahWaktuInteger.toString()
+            jumlahWaktuInteger1 -= 1
+            et_jumlahWaktu.text = jumlahWaktuInteger1.toString()
+        }
+    }
 
+    private fun posting() {
+        val judul = et_judul.text.toString()
+        val deskripsi = et_deskripsi.text.toString()
+        val jumlahWaktu: Int = Integer.parseInt(et_jumlahWaktu.text.toString())
 
+        posting(judul, deskripsi, jumlahWaktu)
+    }
+
+    private fun initSpinnerView() {
+        val arrayAdapter =
+            ArrayAdapter.createFromResource(this, R.array.spinnerKategori, android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = arrayAdapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                category = parent?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
         }
     }
 
@@ -63,11 +88,26 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
         val firebaseAuth = FirebaseAuth.getInstance()
 
         if(judul.isEmpty()&&deskripsi.isEmpty()){
-            et_judul.error = "Please enter judul bro"
-            et_deskripsi.error = "Please enter deskripsi dulu setan"
+            et_judul.error = "Please enter the title"
+            et_deskripsi.error = "Please enter description"
         }
-        val post = Posting(firebaseAuth.currentUser?.displayName,judul,deskripsi, jumlahWaktu,OrderState.POSTED,System.currentTimeMillis(),Kategori.UMUM.toString(),"")
+
+        val post = Posting(
+            firebaseAuth.currentUser?.displayName,
+            judul,
+            deskripsi,
+            jumlahWaktu,
+            OrderState.POSTED,
+            System.currentTimeMillis(),
+            category,
+            ""
+        )
         presenter.setPostingFirebase(post)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDetach()
     }
 }

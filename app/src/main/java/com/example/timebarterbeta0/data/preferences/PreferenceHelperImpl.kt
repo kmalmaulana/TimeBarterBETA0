@@ -12,7 +12,7 @@ class PreferenceHelperImpl(val context: Context, private val prefFileName: Strin
     set(value) = editor.putBoolean(ISLOGIN, value).apply()
 
     override var posting: String?
-        get() = sharedPref.getString(POSTING)
+        get() = sharedPref.getString(POSTING,null)
         set(value) = editor.putString(POSTING,value.toString()).apply()
 
     override fun saveUser(firebaseUser: String) {
@@ -26,6 +26,4 @@ class PreferenceHelperImpl(val context: Context, private val prefFileName: Strin
     }
 }
 
-private fun SharedPreferences.getString(posting: String?): String? {
-    return posting
-}
+
