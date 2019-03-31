@@ -1,16 +1,14 @@
 package com.example.timebarterbeta0.ui.base
 
-import com.example.timebarterbeta0.MyApplication
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 open class BaseMvpPresenter<V : BaseView> constructor(
-    protected val firebaseDatabase: FirebaseDatabase = MyApplication.firebaseDatabase,
+    protected val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance(),
     protected val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) : MvpPresenter<V>, CoroutineScope {
 
