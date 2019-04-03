@@ -4,13 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
-import android.widget.Toast
 import com.example.timebarterbeta0.LeaderBoardFragment
 import com.example.timebarterbeta0.R
 import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.base.BaseActivity
-import com.example.timebarterbeta0.ui.main.akun.AccountContract
-import com.example.timebarterbeta0.ui.main.akun.AccountPresenter
 import com.example.timebarterbeta0.ui.main.akun.AkunFragment
 import com.example.timebarterbeta0.ui.main.beranda.BerandaFragment
 import com.example.timebarterbeta0.ui.main.listOrder.ListFragment
@@ -18,16 +15,15 @@ import com.example.timebarterbeta0.ui.main.post.PostActivity
 import kotlinx.android.synthetic.main.main_activity.*
 
 
-class MainActivity : BaseActivity(), AccountContract.ViewAccount {
-    override fun showLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class MainActivity : BaseActivity(){
+    /*override fun showLoading() {
+
     }
 
     override fun hideLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    private lateinit var accountPresenter: AccountContract.Presenter
+    }*/
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
         when (item.itemId) {
@@ -55,9 +51,9 @@ class MainActivity : BaseActivity(), AccountContract.ViewAccount {
         false
     }
 
-    override fun showUserInfo(user: User) {
+    /*override fun showUserInfo(user: User) {
         this.user = user
-    }
+    }*/
 
     lateinit var user: User
 
@@ -67,10 +63,7 @@ class MainActivity : BaseActivity(), AccountContract.ViewAccount {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        accountPresenter = AccountPresenter(this)
-        accountPresenter.onAttach(this)
         user = User()
-        accountPresenter.getCurrentUserInfo()
 
         bottomNavigtion.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         replaceFragment(BerandaFragment.newInstance(this.user.Name))
@@ -87,11 +80,5 @@ class MainActivity : BaseActivity(), AccountContract.ViewAccount {
         supportFragmentManager.beginTransaction()
         .replace(R.id.fragmentContainer, fragment)
         .commit()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_LONG).show()
-        accountPresenter.onDetach()
     }
 }

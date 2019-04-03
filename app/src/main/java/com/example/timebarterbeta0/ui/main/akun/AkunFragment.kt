@@ -16,19 +16,21 @@ import com.google.firebase.auth.FirebaseAuth
 
 import kotlinx.android.synthetic.main.fragment_akun.*
 
-class AkunFragment : Fragment(){
+class AkunFragment : Fragment(), AccountContract.ViewAccount {
 
     companion object {
-        const val USER = "userName"
+//        const val USER = "userName"
         fun newInstance(user: User): AkunFragment {
 
             val bundle = Bundle()
-            bundle.putParcelable(USER,user)
+//            bundle.putParcelable(USER,user)
             val fragment = AkunFragment()
             fragment.arguments = bundle
             return fragment
         }
     }
+
+    private lateinit var accountPresenter: AccountContract.Presenter
 
     var user: User? = User()
 
@@ -39,14 +41,15 @@ class AkunFragment : Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        showUserInfo(user)
+        accountPresenter = AccountPresenter(this)
+        accountPresenter.onAttach(this)
+        accountPresenter.getCurrentUserInfo()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
-        user = arguments?.getParcelable(USER)
+//        user = arguments?.getParcelable(USER)
         button_logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
 
@@ -57,16 +60,26 @@ class AkunFragment : Fragment(){
         }
     }
 
-    private fun showUserInfo(user: User?) {
-        when {
-            user != null -> {
-                tv_name.text = user.Name
-                iv_profile_picture.loadImage(user.photoProfile.toString())
-                tv_email.text = user.Email
-                tv_points.text = user.point.toString()
-                tv_level.text = user.level
-            }
-        }
+    override fun showUserInfo(user: User) {
+        tv_name.text = user.Name
+        iv_profile_picture.loadImage(user.photoProfile.toString())
+        tv_email.text = user.Email
+        tv_points.text = user.point.toString()
+        tv_level.text = user.level
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Toast.makeText(activity, "onDetach", Toast.LENGTH_LONG).show()
+        accountPresenter.onDetach()
+    }
+
+    override fun showLoading() {
+
+    }
+
+    override fun hideLoading() {
 
     }
 }

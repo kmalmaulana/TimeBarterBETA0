@@ -9,7 +9,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 //        startKoin(this, listOf(presenterModule))

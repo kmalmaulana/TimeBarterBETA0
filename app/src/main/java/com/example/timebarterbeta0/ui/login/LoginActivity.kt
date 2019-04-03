@@ -21,12 +21,12 @@ class LoginActivity : BaseActivity(), LoginContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         presenter = LoginPresenter(this)
+
         presenter.onAttach(this)
 
         button_login.setOnClickListener {
-            Toast.makeText(this,"anu",Toast.LENGTH_LONG).show()
+//            Toast.makeText(this,"anu",Toast.LENGTH_LONG).show()
             presenter.loginAccount(
                 AccountLogin(
                     field_login_email.text.toString(),
