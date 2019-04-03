@@ -21,7 +21,6 @@ class BerandaMvpPresenter : BaseMvpPresenter<BerandaContract.View>(), BerandaCon
     val uId = firebaseAuth.currentUser?.uid.toString()
 
     override fun showPosting() {
-        firebaseDatabase.setPersistenceEnabled(true)
         postingList = mutableListOf()
         val userReference = AccountPresenter.userDb.child(uId)
         postDb = userReference.child("Post")

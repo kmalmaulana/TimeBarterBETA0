@@ -19,10 +19,6 @@ open class BaseMvpPresenter<V : BaseView> constructor(
 
     }
 
-    init {
-        firebaseDatabase.setPersistenceEnabled(true)
-    }
-
     final override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 

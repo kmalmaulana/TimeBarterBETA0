@@ -20,7 +20,6 @@ class AccountPresenter(
     }
 
     override fun getCurrentUserInfo() {
-        firebaseDatabase.setPersistenceEnabled(true)
         val uid = firebaseAuth.currentUser?.uid.toString()
         userDb = userDb.child(uid)
         userDb.keepSynced(true)
