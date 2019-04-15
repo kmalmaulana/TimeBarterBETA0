@@ -6,8 +6,7 @@ import com.example.timebarterbeta0.ui.base.MvpPresenter
 
 interface BerandaContract {
     interface Presenter: MvpPresenter<View> {
-        fun showPosting()
-        fun showDetail(callBack: ()->Unit)
+        fun showPosting(listUId: List<String>)
     }
     interface View: BaseView{
         fun getPosting(posting: MutableList<Posting>?)

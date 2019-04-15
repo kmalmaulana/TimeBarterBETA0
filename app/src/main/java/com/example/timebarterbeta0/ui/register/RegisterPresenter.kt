@@ -37,7 +37,7 @@ class RegisterPresenter(private val mViewRegister: RegisterContract.View?)
         val uId: String
         if (task.isSuccessful) {
             uId = firebaseAuth.currentUser?.uid.toString()
-            AccountPresenter.userDb = firebaseDatabase.getReference(AccountPresenter.USER_KEY).child(uId)
+            AccountPresenter.userDb = firebaseDatabase.getReference(AccountPresenter.USER_REFERENCE).child(uId)
             AccountPresenter.userDb.setValue(user)
 
             mViewRegister?.let {

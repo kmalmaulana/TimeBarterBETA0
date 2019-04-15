@@ -19,6 +19,7 @@
         ipsum laborum numquam possimus praesentium quaerat quo recusandae similique unde vel velit veritatis vitae.
     </string>
     <string name="logout_toast">logout</string>
+    <string name="alert_posting_sukses">Show Postingan</string>
     <string-array name="spinnerKategori">
         <item>Kursus</item>
         <item>Hobi</item>

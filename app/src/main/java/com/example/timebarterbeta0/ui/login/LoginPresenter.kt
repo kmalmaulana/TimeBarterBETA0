@@ -19,9 +19,9 @@ class LoginPresenter(private val mViewLogin: LoginContract.View?)
                 mViewLogin?.showLoading()
                 GlobalScope.launch(Dispatchers.IO) {
                     firebaseAuth.signInWithEmailAndPassword(account.email, account.password)
-                        .addOnCompleteListener { login ->
+                        .addOnCompleteListener { task ->
                             uiScope.launch {
-                                login(login)
+                                login(task)
                             }
                         }
                 }
@@ -33,8 +33,6 @@ class LoginPresenter(private val mViewLogin: LoginContract.View?)
         if (login.isSuccessful) {
             login.addOnSuccessListener { authResult ->
                 //menerima authResult
-
-                Timber.e("hore")
                 uiScope.launch {
                     mViewLogin?.let { viewLogin ->
                         Timber.e("hore mViewLogin")

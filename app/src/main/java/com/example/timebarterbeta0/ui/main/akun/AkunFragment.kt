@@ -16,21 +16,19 @@ import com.google.firebase.auth.FirebaseAuth
 
 import kotlinx.android.synthetic.main.fragment_akun.*
 
-class AkunFragment : Fragment(), AccountContract.ViewAccount {
+class AkunFragment : Fragment() {
 
     companion object {
-//        const val USER = "userName"
+        const val USER = "userName"
         fun newInstance(user: User): AkunFragment {
 
             val bundle = Bundle()
-//            bundle.putParcelable(USER,user)
+            bundle.putParcelable(USER, user)
             val fragment = AkunFragment()
             fragment.arguments = bundle
             return fragment
         }
     }
-
-    private lateinit var accountPresenter: AccountContract.Presenter
 
     var user: User? = User()
 
@@ -39,47 +37,34 @@ class AkunFragment : Fragment(), AccountContract.ViewAccount {
         return inflater.inflate(R.layout.fragment_akun, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        accountPresenter = AccountPresenter(this)
-        accountPresenter.onAttach(this)
-        accountPresenter.getCurrentUserInfo()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
-//        user = arguments?.getParcelable(USER)
+
+        user = arguments?.getParcelable(USER)
+
+        user?.let { user ->
+            showUserInfo(user)
+        }
         button_logout.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-
-            startActivity(Intent(context, LoginActivity::class.java))
-            activity?.finish()
-
-            Toast.makeText(context, getString(R.string.logout_toast), Toast.LENGTH_SHORT).show()
+            logout()
         }
     }
 
-    override fun showUserInfo(user: User) {
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+
+        startActivity(Intent(context, LoginActivity::class.java))
+        activity?.finish()
+
+        Toast.makeText(context, getString(R.string.logout_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showUserInfo(user: User) {
         tv_name.text = user.Name
         iv_profile_picture.loadImage(user.photoProfile.toString())
         tv_email.text = user.Email
         tv_points.text = user.point.toString()
         tv_level.text = user.level
-
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Toast.makeText(activity, "onDetach", Toast.LENGTH_LONG).show()
-        accountPresenter.onDetach()
-    }
-
-    override fun showLoading() {
-
-    }
-
-    override fun hideLoading() {
 
     }
 }

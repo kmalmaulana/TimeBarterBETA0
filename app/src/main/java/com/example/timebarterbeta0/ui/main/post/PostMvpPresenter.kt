@@ -15,11 +15,10 @@ class PostMvpPresenter : BaseMvpPresenter<PostContract.PostView>(), PostContract
         const val POST_KEY = "Post"
         lateinit var postDb: DatabaseReference
     }
-//    val uId = firebaseAuth.currentUser?.uid.toString()
 
     override fun setPostingFirebase(posting: Posting) {
 
-        postDb = AccountPresenter.userDb
+        postDb = AccountPresenter.userDb.child(uid)
 
         val postId: String = postDb.push().key.toString()
         uiScope.launch {

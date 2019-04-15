@@ -4,59 +4,77 @@ import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.base.BaseMvpPresenter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.Logger
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.*
 import timber.log.Timber
 
 
-class AccountPresenter(
-    private val mViewAkun: AccountContract.ViewAccount?
-) : BaseMvpPresenter<AccountContract.ViewAccount>(),
+class AccountPresenter : BaseMvpPresenter<AccountContract.ViewAccount>(),
     AccountContract.Presenter {
-
     companion object {
-        const val USER_KEY = "User"
-        var userDb = firebaseDatabase.getReference(USER_KEY)
+        const val USER_REFERENCE = "User"
+        var userDb = firebaseDatabase.getReference(USER_REFERENCE)
     }
+    val listUser = mutableListOf<User>()
+    val listUid = mutableListOf<String>()
 
-    val listUser = mutableListOf<String>()
-
-    override fun getCurrentUserInfo() {
-//        val uid = firebaseAuth.currentUser?.uid.toString()
-//        userDb = userDb.child(uid)
+    override fun getUserInfo() {
         userDb.keepSynced(true)
         uiScope.launch {
-            withContext(Dispatchers.IO) {
-                userDb.addValueEventListener(object : ValueEventListener {
+            getListUId()
+        }
+    }
+
+    private suspend fun getListUId() {
+        withContext(Dispatchers.IO) {
+            userDb.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    uiScope.launch {
+                        Timber.e(dataSnapshot.toString())
+                        dataSnapshot.children.forEach { user ->
+                            user.key?.let { userKey -> listUid.add(userKey) }
+                        }
+                        mView?.showUId(listUid)
+                        getAllUser()
+                        getUser()
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Timber.e(databaseError.toString())
+                }
+            })
+        }
+    }
+
+    private suspend fun getAllUser(){
+        withContext(Dispatchers.IO){
+            listUid.forEach{ uid ->
+                userDb = userDb.child(uid)
+                userDb.addValueEventListener(object : ValueEventListener{
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        var user: User
                         uiScope.launch {
-                            Timber.e(dataSnapshot.toString())
-                            dataSnapshot.children.forEach { user ->
-                                user.key?.let { listUser.add(it) }
-                            }
-//                            dataSnapshot.getValue(true)
-                            showUser(dataSnapshot)
+                            val userAsync =  withContext(Dispatchers.IO){async { dataSnapshot.getValue(User::class.java) } }
+                            user = userAsync.await()!!
+                            listUser.add(user)
+                            mView?.showAllUser(listUser)
                         }
                     }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        Timber.e(databaseError.toString())
+                    override fun onCancelled(error: DatabaseError) {
+                        errorHandling(error)
                     }
                 })
             }
         }
     }
 
-    private suspend fun showUser(dataSnapshot: DataSnapshot) {
+    private suspend fun getUser() {
+        withContext(Dispatchers.IO){
+            for ((i, user) in listUser.withIndex()) {
 
-        val userDeferred=
-            withContext(coroutineContext) { async { dataSnapshot.getValue(User::class.java) } }
-
-        withContext(coroutineContext){
-            userDeferred.let { userInfo ->
-                userInfo.await()?.let { user ->
-                    mViewAkun?.showUserInfo(user)
+                when (uid) {
+                    listUid[i] -> mView?.showUserInfo(user)
                 }
             }
         }

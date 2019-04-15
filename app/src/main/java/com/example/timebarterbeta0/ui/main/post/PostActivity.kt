@@ -9,18 +9,20 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.timebarterbeta0.R
 import com.example.timebarterbeta0.domain.model.Posting
+import com.example.timebarterbeta0.domain.model.User
+import com.example.timebarterbeta0.ui.main.MainActivity
 import com.example.timebarterbeta0.utils.Kategori
 import com.example.timebarterbeta0.utils.OrderState
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_post.*
 
 class PostActivity : AppCompatActivity(), PostContract.PostView{
 
     private lateinit var presenter: PostMvpPresenter
     var category = Kategori.UMUM.toString()
+    var user = User()
 
     override fun showSuccesMessage() {
-        Toast.makeText(this, "Hore", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.alert_posting_sukses), Toast.LENGTH_LONG).show()
         finish()
     }
     override fun showLoading() {
@@ -38,6 +40,8 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
 
         presenter = PostMvpPresenter()
         presenter.onAttach(this)
+
+        user = intent.getParcelableExtra(MainActivity.EXTRA)
 
         initSpinnerView()
         btn_posting.setOnClickListener { posting() }
@@ -85,7 +89,6 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
     }
 
     private fun posting(judul: String, deskripsi: String, jumlahWaktu: Int) {
-        val firebaseAuth = FirebaseAuth.getInstance()
 
         if(judul.isEmpty()&&deskripsi.isEmpty()){
             et_judul.error = "Please enter the title"
@@ -93,7 +96,7 @@ class PostActivity : AppCompatActivity(), PostContract.PostView{
         }
 
         val post = Posting(
-            firebaseAuth.currentUser?.displayName,
+            user.Name,
             judul,
             deskripsi,
             jumlahWaktu,

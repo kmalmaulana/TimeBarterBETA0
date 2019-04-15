@@ -12,6 +12,7 @@ import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.ui.base.BaseFragment
 import com.example.timebarterbeta0.ui.main.beranda.detail.DetailPostActivity
 import kotlinx.android.synthetic.main.fragment_beranda.*
+import java.util.ArrayList
 
 
 class BerandaFragment : BaseFragment(), BerandaContract.View{
@@ -21,20 +22,20 @@ class BerandaFragment : BaseFragment(), BerandaContract.View{
     companion object {
         const val POSTING_EXTRA = "posting"
         const val USER_EXTRA = "username"
-        fun newInstance(userName: String?): BerandaFragment {
+        const val USER_KEY_EXTRA = "user_key"
+
+        fun newInstance(userName: String?, listUId:List<String>): BerandaFragment {
             val args = Bundle()
             args.putString(USER_EXTRA,userName)
+            args.putStringArrayList(USER_KEY_EXTRA,listUId as ArrayList<String>)
             val fragment = BerandaFragment()
             fragment.arguments = args
             return fragment
         }
     }
 
+    private var listUId= listOf<String>()
     var userName: String? = ""
-
-    init {
-
-    }
 
     override fun getPosting(posting: MutableList<Posting>?) {
         rv_list_post.layoutManager= LinearLayoutManager(context)
@@ -51,9 +52,6 @@ class BerandaFragment : BaseFragment(), BerandaContract.View{
         return { posting: Posting ->
             val intent = Intent(activity, DetailPostActivity::class.java)
             showDetail(intent, posting)
-            presenter.showDetail {
-                showDetail(intent, posting)
-            }
         }
     }
 
@@ -74,17 +72,17 @@ class BerandaFragment : BaseFragment(), BerandaContract.View{
         super.onActivityCreated(savedInstanceState)
         presenter = BerandaMvpPresenter()
         presenter.onAttach(this)
-        presenter.showPosting()
+        presenter.showPosting(this.listUId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userName = arguments?.getString(USER_EXTRA)
+        listUId = arguments?.getStringArrayList(USER_KEY_EXTRA) as List<String>
     }
 
     override fun onDestroy() {
         super.onDestroy()
         presenter.onDetach()
     }
-
 }
