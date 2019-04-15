@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.util.Log
 import com.example.timebarterbeta0.LeaderBoardFragment
 import com.example.timebarterbeta0.R
+import com.example.timebarterbeta0.domain.model.Posting
 import com.example.timebarterbeta0.domain.model.User
 import com.example.timebarterbeta0.ui.base.BaseActivity
 import com.example.timebarterbeta0.ui.main.akun.AccountContract
@@ -13,6 +15,8 @@ import com.example.timebarterbeta0.ui.main.akun.AkunFragment
 import com.example.timebarterbeta0.ui.main.beranda.BerandaFragment
 import com.example.timebarterbeta0.ui.main.listOrder.ListFragment
 import com.example.timebarterbeta0.ui.main.post.PostActivity
+import com.example.timebarterbeta0.utils.extentions.listenerValueEvent
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : BaseActivity(), AccountContract.ViewAccount{
@@ -82,6 +86,20 @@ class MainActivity : BaseActivity(), AccountContract.ViewAccount{
         replaceFragment(BerandaFragment.newInstance(this.user.Name,this.listId))
 
         fab_add_post.setOnClickListener { showPostForm() }
+
+        val db = FirebaseDatabase.getInstance()
+        val userRef = db.getReference("User")
+        val postRef = db.getReference("posts")
+
+        postRef.listenerValueEvent{
+            it.children.forEach {
+                val post = it.getValue(Posting::class.java)
+                userRef.child(post?.uId.toString()).listenerValueEvent {
+                    val user = it.getValue(User::class.java)
+                    Log.d("TES", "post & user : ${Pair(user, post)}")
+                }
+            }
+        }
     }
 
     private fun showPostForm() {

@@ -7,12 +7,10 @@ import com.google.firebase.database.FirebaseDatabase
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    lateinit var database: FirebaseDatabase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(initLayout())
-        database = FirebaseDatabase.getInstance()
+
     }
 
     abstract fun initLayout(): Int
