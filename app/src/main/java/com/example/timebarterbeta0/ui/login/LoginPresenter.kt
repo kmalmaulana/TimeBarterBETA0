@@ -12,12 +12,13 @@ class LoginPresenter(private val mViewLogin: LoginContract.View?) : BaseMvpPrese
     LoginContract.Presenter {
     override fun loginAccount(account: AccountLogin) {
         uiScope.launch {
-            withContext(Dispatchers.IO) {
-                if (validateInputlogin(account)) {
-                    mViewLogin?.showLoading()
-
+            mViewLogin?.showLoading()
+            if (validateInputlogin(account)) {
+                Timber.e("anu berhasil")
+                withContext(Dispatchers.IO) {
                     firebaseAuth.signInWithEmailAndPassword(account.email, account.password)
                         .addOnCompleteListener { login ->
+                            Timber.e("login....")
                             uiScope.launch {
                                 login(login)
                             }
@@ -30,9 +31,9 @@ class LoginPresenter(private val mViewLogin: LoginContract.View?) : BaseMvpPrese
     private fun login(login: Task<AuthResult>) {
 
         if (login.isSuccessful) {
+            Timber.e("hore")
             login.addOnSuccessListener {
                 //menerima authResult
-                Timber.e("hore")
                 mViewLogin?.let { viewLogin ->
                     Timber.e("hore mViewLogin")
                     viewLogin.loginSuccess()
@@ -60,7 +61,7 @@ class LoginPresenter(private val mViewLogin: LoginContract.View?) : BaseMvpPrese
 
         if (Patterns.EMAIL_ADDRESS.matcher(account.email).matches()) {
 
-            if (account.password.isNotEmpty()) {
+            if (!account.password.isEmpty()) {
                 valid = true
 
             } else {

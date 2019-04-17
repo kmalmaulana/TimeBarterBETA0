@@ -7,6 +7,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 
 fun View.visible() {
     visibility = View.VISIBLE
@@ -34,3 +36,6 @@ fun DatabaseReference.listenerValueEvent(onCancel: (DatabaseError) -> Unit = {},
         }
     })
 }
+
+val Any.toJson: JsonElement
+    get() = Gson().toJsonTree(this)
